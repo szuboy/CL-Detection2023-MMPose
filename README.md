@@ -130,7 +130,7 @@ python step2_prepare_coco_dataset.py \
 
 ```
 CUDA_VISIBLE_DEVICES=0 python step3_train_and_evaluation.py \
-cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512.py \
+cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py \
 --work-dir='/data/zhangHY/CL-Detection2023/MMPose-checkpoints' 
 ```
 
@@ -207,7 +207,7 @@ data_root = '/data/zhangHY/CL-Detection2023'
 
 ```
 CUDA_VISIBLE_DEVICES=0 python step4_test_and_visualize.py \
-cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512.py \
+cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py \
 '/data/zhangHY/CL-Detection2023/MMPose-checkpoints/best_SDR 2.0mm_epoch_40.pth' \
 --show-dir='/data/zhangHY/CL-Detection2023/MMPose-visualize' 
 ```
@@ -218,11 +218,11 @@ cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512.py \
 
 
 
-| Arch                        | Input Size |   MRE (mm)    | SDR 2.0mm (%) | SDR 2.5mm (%) | SDR 3.0mm (%) | SDR 4.0mm (%) |                                               ckpt                                                |                                               log                                               |
-|-----------------------------|:----------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------:|
-| [HRNet + AdaptiveWingLoss](https://drive.google.com/file/d/1hes3BhfzEzeXVXpFpkGy25vdNlYtaWB7/view?usp=sharing) | 512 × 512  | 2.258 ± 5.935 |    66.000     |    75.421     |    82.737     |    91.000     |    [ckpt](https://drive.google.com/file/d/11zBGGzYpUbpYxyMkDfYcqPnSZuhGxVY2/view?usp=sharing)     |    [log](https://drive.google.com/file/d/1Gw9tObsETbqyM5EoCVTDauQncXjv4lqN/view?usp=sharing)    |
-| [HRNet + KeypointMSELoss](https://drive.google.com/file/d/15yyi5mRHVzxkgn7iRVKrTWzbcjMfy8My/view?usp=sharing) | 512 × 512  | 2.199 ± 4.828 |    65.474     |    75.632     |    82.316     |    90.947     |     [ckpt](https://drive.google.com/file/d/1XA_btR9iGmpxkq-SsQlSefIBK7gCpdTu/view?usp=sharing)    |     [log](https://drive.google.com/file/d/1KNKfWth6w7_jubni6mk0aHW-15vEZvDv/view?usp=sharing)   |
-| …                           |     …      |       …       |       …       |       …       |       …       |       …       |                                                 …                                                 |                                                …                                                |
+| Arch                                                                                                       | Input Size |   MRE (mm)    | SDR 2.0mm (%) | SDR 2.5mm (%) | SDR 3.0mm (%) | SDR 4.0mm (%) |                                               ckpt                                                |                                               log                                               |
+|------------------------------------------------------------------------------------------------------------|:----------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------:|
+| [HRNet + AdaptiveWingLoss](cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512_AdaptiveWingLoss.py) | 512 × 512  | 2.258 ± 5.935 |    66.000     |    75.421     |    82.737     |    91.000     |    [ckpt](https://drive.google.com/file/d/11zBGGzYpUbpYxyMkDfYcqPnSZuhGxVY2/view?usp=sharing)     |    [log](https://drive.google.com/file/d/1Gw9tObsETbqyM5EoCVTDauQncXjv4lqN/view?usp=sharing)    |
+| [HRNet + KeypointMSELoss](cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py)              | 512 × 512  | 2.199 ± 4.828 |    65.474     |    75.632     |    82.316     |    90.947     |     [ckpt](https://drive.google.com/file/d/1XA_btR9iGmpxkq-SsQlSefIBK7gCpdTu/view?usp=sharing)    |     [log](https://drive.google.com/file/d/1KNKfWth6w7_jubni6mk0aHW-15vEZvDv/view?usp=sharing)   |
+| …                                                                                                          |     …      |       …       |       …       |       …       |       …       |       …       |                                                 …                                                 |                                                …                                                |
 
 
 
@@ -274,7 +274,7 @@ cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512.py \
 
 ```python
 # config file | 模型的配置文件
-parser.add_argument('--config_file', type=str, default='./cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512.py')
+parser.add_argument('--config_file', type=str, default='./cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py')
 
 # data parameters | 数据文件路径和配置文件的路径
 parser.add_argument('--load_mha_path', type=str, default='./step5_docker_and_upload/test/stack1.mha')
@@ -293,7 +293,7 @@ main(experiment_config)
 2、在终端上设置好参数后使用命令传输参数并运行脚本：
 ```
 python step5_predict_expected_output.py \
---config_file='./cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512.py' \
+--config_file='./cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py' \
 --load_mha_path='./step5_docker_and_upload/test/stack1.mha' \
 --save_json_path='./step5_docker_and_upload/test/expected_output.json' \
 --load_weight_path='/data/zhangHY/CL-Detection2023/MMPose-checkpoints/best_SDR 2.0mm_epoch_40.pth'
@@ -322,7 +322,7 @@ python step5_predict_expected_output.py \
 │  export.sh
 │  .dockerignore
 |  cldetection_utils.py
-|  td-hm_hrnet-w32_udp-8xb64-250e-512x512.py
+|  td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py
 │
 ├─test
 │      stack1.mha
@@ -343,7 +343,7 @@ COPY --chown=algorithm:algorithm process.py /opt/algorithm/
 COPY --chown=algorithm:algorithm mmpose_package /opt/algorithm/mmpose_package
 COPY --chown=algorithm:algorithm cldetection_utils.py /opt/algorithm/
 COPY --chown=algorithm:algorithm best_model_weight.pth /opt/algorithm/
-COPY --chown=algorithm:algorithm td-hm_hrnet-w32_udp-8xb64-250e-512x512.py /opt/algorithm/
+COPY --chown=algorithm:algorithm td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py /opt/algorithm/
 ```
 
 然后，将自己的算法过程推理测试过程编程在 `process.py` 文件中的 `predict()` 函数中，并根据自己的 `predict()` 返回值更改 `save()` 函数，其实这一步就是第五步的执行过程，只是一些数据路径被强制规定了。
@@ -390,6 +390,6 @@ cldetection_alg_2023-output-b35388ee544f2a598b5fb5b088494e5c
 - 更加针对性设计的预处理和数据扩增策略，目前仅仅采用的是简单的图像缩放，直接缩放到`(512, 512)`大小，和左右翻转的扩增策略；
 - 替换更强大的骨干网络，比如：`HRNet`系列的其他模型，`Hourglass`模型，或者自注意力机制的`Transformer`模型；
 - 往模型中增加强大的注意力模块，现有的研究也是经常这么做的，这无疑是一个能够提高模型泛化性和性能的不二选择；
-- 该基线代码尝试采用的是 `L1` 和 `AdaptiveWingLoss` 损失函数，选择一个好的损失函数，同样可以让深度学习模型学习更容易，更快速地收敛，达到更高的性能；
+- 该基线代码尝试采用的是 `MSE` 和 `AdaptiveWingLoss` 损失函数，选择一个好的损失函数，同样可以让深度学习模型学习更容易，更快速地收敛，达到更高的性能；
 
 最后的最后，如果您在参与 CL-Detection 2023 挑战赛过程中遇到了什么难题，或者在运行此仓库代码遇到了什么错误，亦或者对该基线模型有什么更好的建议，也还请在 [Issues](https://github.com/szuboy/CL-Detection2023-MMPose/issues) 中提出来哈，我一定积极地解答！

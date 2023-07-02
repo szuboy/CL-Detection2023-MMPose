@@ -33,7 +33,7 @@ class Cldetection_alg_2023(DetectionAlgorithm):
         # 加载自己的模型和权重文件，这里的权重文件路径是 /opt/algorithm/best_model.pt，
         # 这是因为在docker中会将当前目录挂载为 /opt/algorithm/，所以你要访问当前文件夹的任何文件，在代码中的路径都应该是 /opt/algorithm/
         # 初始化模型，init_pose_estimator 函数内部已经加载了模型权重和开启了eval()模式
-        config_file = '/opt/algorithm/td-hm_hrnet-w32_udp-8xb64-250e-512x512.py'
+        config_file = '/opt/algorithm/td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py'
         load_weight_path = '/opt/algorithm/best_model_weight.pth'
         self.pose_estimator = init_pose_estimator(config=config_file, checkpoint=load_weight_path, device=self.device)
 
