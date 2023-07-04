@@ -126,6 +126,14 @@ python step2_prepare_coco_dataset.py \
 
 笔者在这里已经提供了一个基于 `HRNet` 的基线模型的完整配置文件在 `cldetection_configs` 文件夹中，几乎所有的配置项都在上面任君配置，然后按照您使用 `MMPose` 的经验来操作使用，简直是无缝切换呀~
 
+记得别忘了修改配置文件中的数据根目录呀，目前配置文件中的路径暂时是作者自己服务器上的配置，还请修改为对应自己平台的数据路径嘞：
+
+```
+dataset_type = 'CephalometricDataset'
+data_mode = 'topdown'
+data_root = '/data/zhangHY/CL-Detection2023'  # 修改为自己平台上对应的数据路径目录
+```
+
 放心哈，本仓库提供的 [`step3_train_and_evaluation.py`](step3_train_and_evaluation.py) 文件其实就是 MMPose 下的 `tools/train.py` 文件，只是重新命名文件名，让大家的逻辑更加清晰，因此，您可以直接这么使用进行训练验证：
 
 ```
