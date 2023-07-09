@@ -7,6 +7,7 @@ default_hooks = dict(
     checkpoint=dict(
         type='CheckpointHook',
         interval=2,
+        max_keep_ckpts=5,
         save_best='SDR 2.0mm',
         rule='greater'),
     sampler_seed=dict(type='DistSamplerSeedHook'),
