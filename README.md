@@ -285,8 +285,8 @@ cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py \
 parser.add_argument('--config_file', type=str, default='./cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py')
 
 # data parameters | 数据文件路径和配置文件的路径
-parser.add_argument('--load_mha_path', type=str, default='./step5_docker_and_upload/test/stack1.mha')
-parser.add_argument('--save_json_path', type=str, default='./step5_docker_and_upload/test/expected_output.json')
+parser.add_argument('--load_mha_path', type=str, default='./step6_docker_and_upload/test/stack1.mha')
+parser.add_argument('--save_json_path', type=str, default='./step6_docker_and_upload/test/expected_output.json')
 
 # model load dir path | 最好模型的权重文件路径
 parser.add_argument('--load_weight_path', type=str, default='/data/zhangHY/CL-Detection2023/MMPose-checkpoints/best_SDR 2.0mm_epoch_40.pth')
@@ -300,10 +300,10 @@ main(experiment_config)
 
 2、在终端上设置好参数后使用命令传输参数并运行脚本：
 ```
-python step5_predict_expected_output.py \
+python _predict_expected_output.py \
 --config_file='./cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py' \
---load_mha_path='./step5_docker_and_upload/test/stack1.mha' \
---save_json_path='./step5_docker_and_upload/test/expected_output.json' \
+--load_mha_path='./step6_docker_and_upload/test/stack1.mha' \
+--save_json_path='./step6_docker_and_upload/test/expected_output.json' \
 --load_weight_path='/data/zhangHY/CL-Detection2023/MMPose-checkpoints/best_SDR 2.0mm_epoch_40.pth'
 --cuda_id=0
 ```
@@ -319,7 +319,11 @@ python step5_predict_expected_output.py \
 
 其次，注意修改 `requirements.txt` 文件中的代码工程的相关依赖（拉取的镜像中已经包含了 `torch` 模块，请不要重复安装哈），保证预测过程中的相关依赖库都在里面，才能会正确地执行预测代码，得到预测结果。
 
-继而，将 `mmpose_package` 整个文件夹、模型的权重文件（不要有空格和小数点）和 `cldetection_utils.py` 工具文件拷贝到 `step5_docker_and_upload` 目录，保证 `Dockerfile` 中可以安装到 MMPose 框架，并成功加载到模型权重；同时，别忘了将`step4_predict_expected_output.py`脚本预测的 `expected_output.json` 拷贝到 `test` 文件夹，最终文件夹结构如下所示：
+继而，将 `mmpose_package` 整个文件夹、模型的权重文件（不要有空格和小数点）和 `cldetection_utils.py` 工具文件拷贝到 `step6_docker_and_upload` 目录，保证 `Dockerfile` 中可以安装到 MMPose 框架，并成功加载到模型权重；同时，别忘了将`step4_predict_expected_output.py`脚本预测的 `expected_output.json` 拷贝到 `test` 文件夹，
+
+提示：
+在Github目录中已经将mmpose_package复制到了该目录，且 `expected_output.json`默认生成路径为此test文件夹，因此，默认情况下只需要复制并重命名的权重[`best_model_weight.pth`]和config[`td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py`]文件到该目录即可。
+最终文件夹结构如下所示：
 ```
 │  test.sh
 │  Dockerfile
@@ -357,7 +361,7 @@ COPY --chown=algorithm:algorithm td-hm_hrnet-w32_udp-8xb64-250e-512x512_Keypoint
 然后，将自己的算法过程推理测试过程编程在 `process.py` 文件中的 `predict()` 函数中，并根据自己的 `predict()` 返回值更改 `save()` 函数，其实这一步就是第五步的执行过程，只是一些数据路径被强制规定了。
 其中，`predict()` 函数的返回值并无强制要求，如果您对返回值有进行修改，可按照您的编程习惯来就好。
 
-再而，在终端上通过 `sudo ./build.sh` 命令来执行 `build.sh` 脚本（脚本的代码内容一行都不要修改哈）进行构建，检查是否构建成功，进行错误排除；如果一切顺利，您可能会看到类似于以下内容：
+再而，在终端上通过 `sudo sh ./build.sh` 命令来执行 `build.sh` 脚本（脚本的代码内容一行都不要修改哈）进行构建，检查是否构建成功，进行错误排除；此步骤大概运行10分钟，如果一切顺利，您可能会看到类似于以下内容：
 ```
 [+] Building 298.7s (5/16)                                                            a                           
  => [internal] load build definition from Dockerfile                                                        0.0s 
@@ -372,7 +376,7 @@ COPY --chown=algorithm:algorithm td-hm_hrnet-w32_udp-8xb64-250e-512x512_Keypoint
  => => naming to docker.io/library/cldetection_alg_2023                                                     0.0s
 ```
 
-最后，执行 `sudo ./test.sh` 脚本核实 Docker 输出结果和本地预测的结果是否一致，如果一致将看到输入信息：Tests successfully passed...，说明本地的模型的预测结果和 Docker 中的结果是一致的；如若不一致，还请认真排查错误，或者积极向挑战赛组织方积极反馈，亦或者毫不吝啬地在这里的 [Issues](https://github.com/szuboy/CL-Detection2023-MMPose/issues) 中提出来，我们会协助您直到解决问题。
+最后，执行 `sudo sh ./test.sh` 脚本核实 Docker 输出结果和本地预测的结果是否一致，如果一致将看到输入信息：Tests successfully passed...，说明本地的模型的预测结果和 Docker 中的结果是一致的；如若不一致，还请认真排查错误，或者积极向挑战赛组织方积极反馈，亦或者毫不吝啬地在这里的 [Issues](https://github.com/szuboy/CL-Detection2023-MMPose/issues) 中提出来，我们会协助您直到解决问题。
 ```
     ...
         }
@@ -388,7 +392,7 @@ cldetection_alg_2023-output-b35388ee544f2a598b5fb5b088494e5c
 ```
 
 
-最后的最后，直接执行 `sudo ./export.sh` 脚本导出可以上传到挑战赛平台的 `CLdetection_Alg_2023.tar.gz` 名字的 Docker 文件，可以在 Grand-Challenge 平台上创建算法页进行提交（进度 100%，完美撒花 🌷）。
+最后的最后，直接执行 `sudo sh ./export.sh` 脚本导出可以上传到挑战赛平台的 `CLdetection_Alg_2023.tar.gz` 名字的 Docker 文件，可以在 Grand-Challenge 平台上创建算法页进行提交（进度 100%，完美撒花 🌷）。
 
 
 ## 可以给到参赛者什么建议嘛？
