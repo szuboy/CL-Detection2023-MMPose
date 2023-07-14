@@ -25,7 +25,7 @@ mim install mmengine
 mim install "mmcv>=2.0.0"
 ```
 
-**（2）下载本仓库提供的代码：** 本仓库是下载的是主分支的 MMPose 1.0.0（Pytorch版本1.8+），可直接通过 Git 克隆本仓库或者是右上角的 Download ZIP 即可，再进行安装操作 MMPose；
+**（2）下载本仓库提供的代码：** 本仓库是下载的是主分支的 MMPose V1.0.0（Pytorch版本1.8+），可直接通过 Git 克隆本仓库或者是右上角的 Download ZIP 即可，再进行安装操作 MMPose；
 这是因为本仓库提供的 MMPose 代码增加了适配挑战赛的数据集 `CephalometricDataset` 和 `CephalometricMetric` 类，可以大家的使用体验更加丝滑。如果您现有的 Pytorch 版本不适配，可通过 `conda` 创建一个虚拟环境来完美兼容，具体可参考 [MMPose安装教程](https://mmpose.readthedocs.io/en/latest/installation.html#installation)中的虚拟环境建立。
 ```
 git clone https://github.com/szuboy/CL-Detection2023-MMPose.git
@@ -50,7 +50,7 @@ print(mmpose.__version__)
 
 **（2）数据的预处理：** 对于 CL-Detection 2023挑战赛的数据集，组织方考虑到存储的支出和分发的便利，所有图像都进行0填充到统一的大小尺度(2400, 2880, 3)。因此，都有一些不相关的区域需要删除，并生成 MMPose 框架的要求的 JSON 文件格式，这个预处理脚本的主要功能就是处理这两个问题。
 
-在这一步中，您可以执行脚本 [`step2_prepare_coco_dataset.py`](step2_prepare_coco_dataset.py) 来自动执行上述操作，您可以用以下两种方案进行不同关键点坐标预测模型的训练，其中 `train_stack.mha` 是挑战赛提供的图像数据，含有400张头影图像；`train-gt.json` 是挑战赛提供的标注文件：
+在这一步中，您可以执行脚本 [`step2_prepare_coco_dataset.py`](step2_prepare_coco_dataset.py) 来自动执行上述操作，您可以用以下两种方案进行数据的预处理，其中 `train_stack.mha` 是挑战赛提供的图像数据，含有400张头影图像；`train-gt.json` 是挑战赛提供的标注文件：
 
 1、在脚本 [`step2_prepare_coco_dataset.py`](step2_prepare_coco_dataset.py) 中修改或者设置以下数据访问路径参数和结果保留路径，再运行该脚本即可：
 
@@ -79,7 +79,7 @@ python step2_prepare_coco_dataset.py \
 
 代码运行后，您会得到一个去除零填充的图像的文件夹和三个 JSON 文件。此仓库采取**训练-验证-测试**的模式，模型在训练集上进行训练，在验证集上进行模型训练和超参数的选择，然后在测试集上测试得到最终的模型性能表现。
 
-现有的划分逻辑是将400张图像随机划分，其中：训练集350张图像，验证集和测试集各50张图。当然，您可以按照您的想法来进行划分，不必按照这个模式来操作，比如：只划分训练集和验证集，以此来增加训练集的照片数量，这或许可以提升模型的性能表现。
+现有的划分逻辑是将400张图像随机划分，其中：训练集300张图像，验证集和测试集各50张图。当然，您可以按照您的想法来进行划分，不必按照这个模式来操作，比如：只划分训练集和验证集，以此来增加训练集的照片数量，这或许可以提升模型的性能表现。
 
 **注意：** 为了适配 MMPose 框架的要求，我们需将 CL-Detection2023 挑战赛提供的训练数据及其对应的标注文件转换为采用的类似于 COCO 格式，然后进行解析。其中唯一不同的是：我们在 `image` 的信息中增加了像素间的距离 `spacing` 键值，此指类似一个“比例尺”作用，进行像素距离和物理距离换算，以保证后续的指标计算。
 
@@ -319,7 +319,7 @@ python step5_predict_expected_output.py \
 
 其次，注意修改 `requirements.txt` 文件中的代码工程的相关依赖（拉取的镜像中已经包含了 `torch` 模块，请不要重复安装哈），保证预测过程中的相关依赖库都在里面，才能会正确地执行预测代码，得到预测结果。
 
-继而，将 `mmpose_package` 整个文件夹、模型的权重文件（不要有空格和小数点）和 `cldetection_utils.py` 工具文件拷贝到 `step5_docker_and_upload` 目录，保证 `Dockerfile` 中可以安装到 MMPose 框架，并成功加载到模型权重；同时，别忘了将`step4_predict_expected_output.py`脚本预测的 `expected_output.json` 拷贝到 `test` 文件夹，最终文件夹结构如下所示：
+继而，将 `mmpose_package` 整个文件夹、模型的权重文件（不要有空格和小数点）和 `cldetection_utils.py` 工具文件拷贝到 `step5_docker_and_upload` 目录，保证 `Dockerfile` 中可以安装到 MMPose 框架，并成功加载到模型权重；同时，别忘了将`step5_predict_expected_output.py`脚本预测的 `expected_output.json` 拷贝到 `test` 文件夹，最终文件夹结构如下所示：
 ```
 │  test.sh
 │  Dockerfile
@@ -359,7 +359,7 @@ COPY --chown=algorithm:algorithm td-hm_hrnet-w32_udp-8xb64-250e-512x512_Keypoint
 
 再而，在终端上通过 `sudo ./build.sh` 命令来执行 `build.sh` 脚本（脚本的代码内容一行都不要修改哈）进行构建，检查是否构建成功，进行错误排除；如果一切顺利，您可能会看到类似于以下内容：
 ```
-[+] Building 298.7s (5/16)                                                            a                           
+[+] Building 298.7s (5/16)                                                                                       
  => [internal] load build definition from Dockerfile                                                        0.0s 
  => => transferring dockerfile: 4.07kB                                                                      0.0s 
  => [internal] load .dockerignore                                                                           0.0s
