@@ -14,7 +14,15 @@
 [[挑战赛排行榜🏆](https://cl-detection2023.grand-challenge.org/evaluation/challenge/leaderboard/)]
 [[ENGLISH README👀](README-EN.md)]
 
-
+<div>
+<div style="background: #6ab0de; padding: 8px; color: white;">
+📰更新：支持 RTMPose 框架配置
+</div>
+<div  style="background: #e7f2fa; padding: 8px;">
+为了更方便大家的使用，实现更好的性能，本仓库已经及时同步更新了对 RTMPose 的支持。由于 RTMPose 同样是基于 MMPose 框架进行搭建的，因此可以直接修改配置文件完成构建。
+在作者深入体验下，并结合论文和镜佬的解读后，给出的建议：<strong>选择热图回归或许才是对 CL-Detection2023 挑战赛的最优解决方案？</strong>抱歉，两套范式的基线模型差不多，暂时没有定论；RTMPose框架速度虽然快，采用 SimCC 解码可以克服热图降采样带来的固有误差，但正如论文中的说的那样，在大尺度图像的情况下，热图回归带来的性能收益会高于 SimCC，具体的解读可以<a href="./docs/why_rtmpose.md">看这里</a>👈。
+</div>
+</div>
 
 ## 第一步：安装使用
 
@@ -134,7 +142,7 @@ data_mode = 'topdown'
 data_root = '/data/zhangHY/CL-Detection2023'  # 修改为自己平台上对应的数据路径目录
 ```
 
-放心哈，本仓库提供的 [`step3_train_and_evaluation.py`](step3_train_and_evaluation.py) 文件其实就是 MMPose 下的 `tools/train.py` 文件，只是重新命名文件名，让大家的逻辑更加清晰，因此，您可以直接这么使用进行训练验证：
+放心哈，本仓库提供的 [`step3_train_and_evaluation.py`](step3_train_and_evaluation.py) 文件其实就是 MMPose 下的 `tools/train.py` 文件，只是重新命名文件名，让大家的逻辑更加清晰，因此，您可以直接这么使用进行训练验证 （别忘了，我们已经更新了 RTMPose 模型的配置啦）：
 
 ```
 CUDA_VISIBLE_DEVICES=0 python step3_train_and_evaluation.py \
@@ -229,7 +237,8 @@ cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py \
 | Arch                                                                                                       | Input Size |   MRE (mm)    | SDR 2.0mm (%) | SDR 2.5mm (%) | SDR 3.0mm (%) | SDR 4.0mm (%) |                                               ckpt                                                |                                               log                                               |
 |------------------------------------------------------------------------------------------------------------|:----------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------:|
 | [HRNet + AdaptiveWingLoss](cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512_AdaptiveWingLoss.py) | 512 × 512  | 2.258 ± 5.935 |    66.000     |    75.421     |    82.737     |    91.000     |    [ckpt](https://drive.google.com/file/d/11zBGGzYpUbpYxyMkDfYcqPnSZuhGxVY2/view?usp=sharing)     |    [log](https://drive.google.com/file/d/1Gw9tObsETbqyM5EoCVTDauQncXjv4lqN/view?usp=sharing)    |
-| [HRNet + KeypointMSELoss](cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py)              | 512 × 512  | 2.199 ± 4.828 |    65.474     |    75.632     |    82.316     |    90.947     |     [ckpt](https://drive.google.com/file/d/1XA_btR9iGmpxkq-SsQlSefIBK7gCpdTu/view?usp=sharing)    |     [log](https://drive.google.com/file/d/1KNKfWth6w7_jubni6mk0aHW-15vEZvDv/view?usp=sharing)   |
+| [HRNet + KeypointMSELoss](cldetection_configs/td-hm_hrnet-w32_udp-8xb64-250e-512x512_KeypointMSELoss.py)   | 512 × 512  | 2.199 ± 4.828 |    65.474     |    75.632     |    82.316     |    90.947     |     [ckpt](https://drive.google.com/file/d/1XA_btR9iGmpxkq-SsQlSefIBK7gCpdTu/view?usp=sharing)    |     [log](https://drive.google.com/file/d/1KNKfWth6w7_jubni6mk0aHW-15vEZvDv/view?usp=sharing)   |
+| [RTMPose + KLDiscretLoss](cldetection_configs/rtmpose-m_8xb256-420e-512x512.py)                            | 512 × 512  | 2.616 ± 8.031 |    59.684     |    70.474     |    78.684     |    89.211     |     [ckpt](https://drive.google.com/file/d/14GiqvFkOlm_3i182Lw8v_Xf_DQGxaD5Z/view?usp=sharing)    |     [log](https://drive.google.com/file/d/1zskhJTLZnClxEpaGC-Fjf6XbfqdCzXlp/view?usp=sharing)   |
 | …                                                                                                          |     …      |       …       |       …       |       …       |       …       |       …       |                                                 …                                                 |                                                …                                                |
 
 
