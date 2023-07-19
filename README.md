@@ -14,15 +14,10 @@
 [[挑战赛排行榜🏆](https://cl-detection2023.grand-challenge.org/evaluation/challenge/leaderboard/)]
 [[ENGLISH README👀](README-EN.md)]
 
-<div>
-<div style="background: #6ab0de; padding: 8px; color: white;">
-📰更新：支持 RTMPose 框架配置
-</div>
-<div  style="background: #e7f2fa; padding: 8px;">
-为了更方便大家的使用，实现更好的性能，本仓库已经及时同步更新了对 RTMPose 的支持。由于 RTMPose 同样是基于 MMPose 框架进行搭建的，因此可以直接修改配置文件完成构建。
-在作者深入体验下，并结合论文和镜佬的解读后，给出的建议：<strong>选择热图回归或许才是对 CL-Detection2023 挑战赛的最优解决方案？</strong>抱歉，两套范式的基线模型差不多，暂时没有定论；RTMPose框架速度虽然快，采用 SimCC 解码可以克服热图降采样带来的固有误差，但正如论文中的说的那样，在大尺度图像的情况下，热图回归带来的性能收益会高于 SimCC，具体的解读可以<a href="./docs/why_rtmpose.md">看这里</a>👈。
-</div>
-</div>
+
+**📰更新：支持 RTMPose 框架配置**：为了更方便大家的使用，实现更好的性能，本仓库已经及时同步更新了对 RTMPose 的支持。由于 RTMPose 同样是基于 MMPose 框架进行搭建的，因此可以直接修改配置文件完成构建。
+在作者深入体验下，并结合论文和镜佬的解读后，给出的建议：<strong>选择热图回归或许才是对 CL-Detection2023 挑战赛的最优解决方案？</strong>抱歉，两套范式的基线模型差不多，暂时没有定论；RTMPose 框架速度虽然快，采用 SimCC 解码可以克服热图降采样带来的固有误差，但正如论文中的说的那样，在大尺度图像的情况下，热图回归带来的性能收益会高于 SimCC，具体的解读可以<a href="./docs/why_rtmpose.md">看这里</a>👈。
+
 
 ## 第一步：安装使用
 
